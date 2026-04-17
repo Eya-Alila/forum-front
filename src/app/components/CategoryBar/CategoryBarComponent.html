@@ -1,0 +1,29 @@
+<nav class="category-bar">
+  <div class="category-bar-inner">
+
+    <!-- Tout -->
+    <button
+      type="button"
+      class="cat-btn cat-color-0"
+      [class.active]="selectedCategoryId === null"
+      (click)="selectCategory(null)">
+      <span class="cat-circle">T</span>
+      Tout
+    </button>
+
+    <!-- Catégories dynamiques -->
+    <button
+      type="button"
+      class="cat-btn"
+      *ngFor="let cat of categories; let i = index"
+      [class]="'cat-btn cat-color-' + ((i + 1) % 8)"
+      [class.active]="selectedCategoryId === cat.id"
+      (click)="selectCategory(cat.id)">
+      <span class="cat-circle">
+        {{ cat.titre.charAt(0).toUpperCase() }}
+      </span>
+      {{ cat.titre }}
+    </button>
+
+  </div>
+</nav>

@@ -1,0 +1,140 @@
+<div class="register-page">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Inscription</h1>
+      <p>Créez votre compte pour rejoindre le forum</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
+
+      <!-- Nom -->
+      <div class="form-group">
+        <label for="name">Nom complet</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Entrer votre nom"
+          class="form-input" />
+
+        <small class="field-error"
+          *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
+          Le nom est obligatoire
+        </small>
+      </div>
+
+      <!-- Pseudo -->
+      <div class="form-group">
+        <label for="pseudo">Pseudo</label>
+        <input
+          id="pseudo"
+          type="text"
+          formControlName="pseudo"
+          placeholder="Choisir un pseudo"
+          class="form-input" />
+
+        <small class="field-error"
+          *ngIf="form.get('pseudo')?.touched && form.get('pseudo')?.hasError('required')">
+          Le pseudo est obligatoire
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Entrer votre email"
+          class="form-input" />
+
+        <small class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
+          L'email est obligatoire
+        </small>
+
+        <small class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
+          Veuillez entrer un email valide
+        </small>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Créer un mot de passe"
+            class="form-input" />
+
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Masquer' : 'Afficher' }}
+          </button>
+        </div>
+
+        <small class="field-error"
+          *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
+          Le mot de passe est obligatoire
+        </small>
+      </div>
+
+      <!-- Confirmation mot de passe -->
+      <div class="form-group">
+        <label for="password_confirmation">Confirmer le mot de passe</label>
+
+        <div class="password-wrapper">
+          <input
+            id="password_confirmation"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="password_confirmation"
+            placeholder="Confirmer le mot de passe"
+            class="form-input" />
+
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="showConfirmPassword = !showConfirmPassword">
+            {{ showConfirmPassword ? 'Masquer' : 'Afficher' }}
+          </button>
+        </div>
+
+        <small class="field-error"
+          *ngIf="form.get('password_confirmation')?.touched && form.get('password_confirmation')?.hasError('required')">
+          La confirmation est obligatoire
+        </small>
+
+        <small class="field-error"
+          *ngIf="form.touched && form.hasError('passwordMismatch')">
+          Les mots de passe ne correspondent pas
+        </small>
+      </div>
+
+      <!-- Message erreur -->
+      <div class="error-box" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <!-- Bouton -->
+      <button
+        type="submit"
+        class="register-btn"
+        [disabled]="loading">
+        {{ loading ? 'Inscription...' : "S'inscrire" }}
+      </button>
+
+      <!-- Lien connexion -->
+      <p class="login-link">
+        Vous avez déjà un compte ?
+        <a routerLink="/login">Se connecter</a>
+      </p>
+    </form>
+  </div>
+</div>

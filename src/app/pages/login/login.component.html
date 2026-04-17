@@ -1,0 +1,77 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Connexion</h1>
+      <p>Accédez à votre espace forum</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Entrer votre email"
+          class="form-input" />
+
+        <small class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
+          L'email est obligatoire
+        </small>
+
+        <small class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
+          Veuillez entrer un email valide
+        </small>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Entrer votre mot de passe"
+            class="form-input" />
+
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Masquer' : 'Afficher' }}
+          </button>
+        </div>
+
+        <small class="field-error"
+          *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
+          Le mot de passe est obligatoire
+        </small>
+      </div>
+
+      <!-- Message erreur -->
+      <div class="error-box" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <!-- Bouton -->
+      <button
+        type="submit"
+        class="login-btn"
+        [disabled]="loading">
+        {{ loading ? 'Connexion...' : 'Se connecter' }}
+      </button>
+
+      <!-- Lien inscription -->
+      <p class="register-link">
+        Vous n’avez pas de compte ?
+        <a routerLink="/register">Créer un compte</a>
+      </p>
+    </form>
+  </div>
+</div>

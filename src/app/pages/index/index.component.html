@@ -1,0 +1,227 @@
+<!-- CATEGORY BAR -->
+<nav class="category-bar">
+  <div class="category-bar-inner">
+
+    <button
+      type="button"
+      class="cat-btn"
+      [class.active]="selectedCategory === null"
+      (click)="selectCategory(null)"
+      title="Toutes les catégories"
+      aria-label="Toutes les catégories"
+    >
+      <div class="cat-circle-label">T</div>
+      <span class="cat-text">Tout</span>
+    </button>
+
+    <button
+      type="button"
+      *ngFor="let cat of categories"
+      class="cat-btn"
+      [class.active]="selectedCategory === cat.id"
+      (click)="selectCategory(cat.id)"
+      [title]="cat.titre"
+      [attr.aria-label]="cat.titre"
+    >
+      <img
+        *ngIf="cat.image"
+        [src]="'http://localhost:8000/storage/' + cat.image"
+        [alt]="cat.titre"
+        class="cat-icon-img"
+        (error)="onCategoryImageError(cat)"
+      />
+
+    <div *ngIf="!cat.image" class="cat-circle-icon">
+      <i [ngClass]="getCategoryIcon(cat.titre)"></i>
+    </div>
+
+
+      <span class="cat-text">{{ cat.titre }}</span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- CONTENU -->
+<div class="home-page">
+  <div class="home-layout">
+    <main class="feed">
+
+      <!-- Chargement -->
+      <div class="empty-state" *ngIf="loadingPosts">
+        Chargement des publications...
+      </div>
+
+      <!-- Aucun post -->
+      <div class="empty-state" *ngIf="!loadingPosts && filteredPosts.length === 0">
+        Aucune publication pour le moment.
+      </div>
+      
+<!-- ICI -->
+<div class="forum-intro">
+  <div class="forum-intro-badge">Forum anonyme</div>
+
+  <h2 class="forum-intro-title">
+    Exprime-toi librement, sans révéler ton identité
+  </h2>
+
+  <p class="forum-intro-text">
+    Cet espace est conçu pour partager des idées, poser des questions et discuter en toute discrétion.
+  </p>
+
+  <div class="forum-intro-tags">
+    <span class="forum-tag">Anonymat respecté</span>
+    <span class="forum-tag">Discussions libres</span>
+    <span class="forum-tag">Respect obligatoire</span>
+  </div>
+</div>
+
+      
+
+      <!-- POSTS -->
+      <section class="posts-section">
+        <article class="post-card" *ngFor="let post of paginatedPosts">
+
+          <!-- HEADER -->
+           
+          <div class="post-header">
+
+            <!-- GAUCHE : avatar + pseudo -->
+            <div class="user-info">
+              <div class="post-avatar">
+                {{ getInitial(post.user?.pseudo) }}
+              </div>
+
+              <div>
+                <div class="post-author" [title]="post.user?.pseudo">
+                  {{ formatPseudo(post.user?.pseudo) }}
+                </div>
+
+                <div class="post-date">
+                  {{ formatDate(post.created_at) }}
+                </div>
+              </div>
+            </div>
+
+            <!-- DROITE : icône catégorie -->
+            <div
+              class="post-category-icon"
+              [title]="post.categorie?.titre"
+            >
+              <i [ngClass]="getCategoryIcon(post.categorie?.titre)"></i>
+            </div>
+
+          </div>
+
+          <!-- BODY -->
+          <div class="post-body">
+            <h3 class="post-title" [title]="post.titre">
+              {{ formatTitle(post.titre) }}
+            </h3>
+
+            <p class="post-content">{{ post.contenu }}</p>
+
+            <img
+              *ngIf="post.image"
+              [src]="'http://localhost:8000/storage/' + post.image"
+              class="post-image"
+              alt="Image de publication"
+              (error)="onImageError(post)"
+            />
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="post-actions">
+            <button class="icon-btn" (click)="toggleLike(post)">
+              <i
+                class="fa-heart"
+                [ngClass]="hasUserLiked(post) ? 'fa-solid liked' : 'fa-regular'"
+              ></i>
+              <span class="count">{{ countLikes(post) }}</span>
+            </button>
+
+            <button class="icon-btn" (click)="toggleComments(post)">
+              <i class="fa-regular fa-comment"></i>
+              <span class="count">{{ countComments(post) }}</span>
+            </button>
+          </div>
+
+          <!-- COMMENTS -->
+          <div class="comments-panel" *ngIf="post.showComments">
+            <div
+              class="comments-list"
+              *ngIf="post.commentaires?.length > 0; else noComments"
+            >
+              <div class="comment-item" *ngFor="let c of post.commentaires">
+                <div class="comment-box">
+                  <div class="comment-author">
+                    <strong>{{ formatPseudo(c.user?.pseudo) }}</strong>
+                    <span class="comment-date">
+                      • {{ formatDate(c.created_at) }}
+                    </span>
+                  </div>
+
+                  <div class="comment-text">
+                    {{ c.contenu }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noComments>
+              <div class="no-comments">
+                Aucun commentaire pour le moment.
+              </div>
+            </ng-template>
+
+            <div class="comment-form">
+              <input
+                [(ngModel)]="post.comment"
+                placeholder="Écrire un commentaire..."
+                class="comment-input"
+              />
+
+              <button
+                class="send-comment-btn"
+                [disabled]="!post.comment || !post.comment.trim()"
+                (click)="comment(post, post.comment)"
+              >
+                Envoyer
+              </button>
+            </div>
+          </div>
+
+        </article>
+      </section>
+
+      <!-- PAGINATION -->
+      <div class="pagination-wrapper" *ngIf="totalPages > 1">
+        <button
+          class="page-btn nav-btn"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+        >
+          Précédent
+        </button>
+
+        <button
+          class="page-btn"
+          *ngFor="let page of pageNumbers"
+          [class.active]="currentPage === page"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          class="page-btn nav-btn"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          Suivant
+        </button>
+      </div>
+
+    </main>
+  </div>
+</div>

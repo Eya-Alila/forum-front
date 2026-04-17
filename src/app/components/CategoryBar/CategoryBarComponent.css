@@ -1,0 +1,93 @@
+.category-bar {
+  background: #ffffff;
+  border-bottom: 0.5px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.category-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  height: 56px;
+}
+
+.category-bar-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  border: 0.5px solid #e5e7eb;
+  background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.cat-btn:hover {
+  border-color: #d1d5db;
+  color: #111827;
+  background: #f9fafb;
+}
+
+.cat-btn.active {
+  border-color: transparent;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.cat-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* ── Palette par index ── */
+.cat-color-0 { --c-bg: #6366f1; --c-light: #eef2ff; --c-text: #4338ca; }
+.cat-color-1 { --c-bg: #0ea5e9; --c-light: #e0f2fe; --c-text: #0369a1; }
+.cat-color-2 { --c-bg: #10b981; --c-light: #d1fae5; --c-text: #047857; }
+.cat-color-3 { --c-bg: #8b5cf6; --c-light: #ede9fe; --c-text: #6d28d9; }
+.cat-color-4 { --c-bg: #f59e0b; --c-light: #fef3c7; --c-text: #b45309; }
+.cat-color-5 { --c-bg: #ef4444; --c-light: #fee2e2; --c-text: #b91c1c; }
+.cat-color-6 { --c-bg: #ec4899; --c-light: #fce7f3; --c-text: #be185d; }
+.cat-color-7 { --c-bg: #14b8a6; --c-light: #ccfbf1; --c-text: #0f766e; }
+
+/* Cercle inactif : fond pastel + texte coloré */
+.cat-btn .cat-circle {
+  background: var(--c-light);
+  color: var(--c-text);
+}
+
+/* Bouton actif : fond plein coloré */
+.cat-btn.active {
+  background: var(--c-bg);
+}
+
+/* Cercle actif : fond blanc semi-transparent */
+.cat-btn.active .cat-circle {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
